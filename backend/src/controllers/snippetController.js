@@ -9,6 +9,7 @@ export const createSnippet = async (req, res) => {
     }
 
     const user = req.user._id;
+    console.log(user);
 
     const newSnippet = new Snippet({ title, code, language, user });
     await newSnippet.save();
@@ -16,6 +17,17 @@ export const createSnippet = async (req, res) => {
     return res.status(201).json({ message: "Snippet saved successfully!" });
   } catch (error) {
     console.log("Error in createSnippet controller: ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getAllSnippets = async (req, res) => {
+  try {
+    const user = req.user._id;
+    const snippets = await Snippet.find({ user });
+    return res.status(200).json(snippets);
+  } catch (error) {
+    console.log("Error in getAllSnippets controller: ", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
