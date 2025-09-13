@@ -47,6 +47,49 @@ export const getSingleSnippet = async (req, res) => {
     res.status(200).json(singleSnippet);
   } catch (error) {
     console.log("Error in getSingleSnippet controller: ", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const updateSnippet = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, code, language } = req.body;
+    const newSnippet = await Snippet.findOneAndUpdate(
+      { _id: id, user: req.user._id },
+      {
+        title,
+        code,
+        language,
+      },
+      { new: true, runValidators: true }
+    );
+    if (!newSnippet) {
+      return res.status(404).json({ message: "Snippet not found" });
+    }
+    return res.status(200).json(newSnippet);
+  } catch (error) {
+    console.log("Error in updateSnippet controller: ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const deleteSnippet = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedSnippet = await Snippet.findOneAndDelete({
+      _id: id,
+      user: req.user._id,
+    });
+
+    if (!deletedSnippet) {
+      return res.status(404).json({ message: "Snippet not found" });
+    }
+
+    res.status(200).json({ message: "Snippet deleted successfully" });
+  } catch (error) {
+    console.log("Error in deleteSnippet controller: ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
