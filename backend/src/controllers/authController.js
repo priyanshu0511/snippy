@@ -26,7 +26,23 @@ export const signup = async (req, res) => {
     const newUser = new User({ username, email, password: newPassword });
     await newUser.save();
 
-    return res.status(201).json({ message: "User saved successfully!" });
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email, username: newUser.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    return res.status(200).json({
+      message: "Signup Successfull",
+      token,
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+        username: newUser.username,
+      },
+    });
   } catch (error) {
     console.log("error in signup controller: ", error);
     return res.status(500).json({ message: "Internal Server Error" });
