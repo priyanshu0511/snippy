@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import authRoutes from "./src/routes/authRoutes.js";
 import { connectDB } from "./src/lib/db.js";
 import snippetRouter from "./src/routes/snippetRoutes.js";
@@ -10,6 +11,11 @@ dotenv.config();
 const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials:true
+}))
 
 app.use("/api/auth", authRoutes);
 app.use("/api/snippet", snippetRouter);
