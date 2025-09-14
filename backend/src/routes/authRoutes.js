@@ -18,4 +18,8 @@ router.get("/profile", protect, (req, res) => {
   return res.status(200).json({ message: "Profile page" });
 });
 
+router.get("/me", protect, (req, res) => {
+  return res.status(200).json({ success: true, user: req.user });
+});
+
 export default router;
