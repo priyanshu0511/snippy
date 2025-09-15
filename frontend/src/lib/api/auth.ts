@@ -1,3 +1,4 @@
+import { formDataLogin } from "@/app/(auth)/login/page";
 import { formData } from "@/app/(auth)/signup/page";
 import { axiosInstance } from "@/utilities/axios";
 
@@ -14,3 +15,12 @@ export const signup = async (data: formData) => {
   }
   return res.data;
 };
+
+export const login=async(data:formDataLogin)=>{
+    const res=await axiosInstance.post("/auth/login",data);
+    const token: string = res.data?.token;
+  if (token) {
+    localStorage.setItem("token", token);
+  }
+  return res.data;
+}
