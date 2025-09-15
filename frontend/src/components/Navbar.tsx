@@ -1,18 +1,19 @@
 "use client";
 
 import useAuthUser from "@/hooks/useAuthUser";
+import useLogout from "@/hooks/useLogout";
 
 const Navbar = () => {
   const { authData } = useAuthUser();
-  console.log(authData);
+  const logout=useLogout();
 
   return (
-    <nav className="flex justify-between px-6 py-4 shadow h-16 items-center bg-gray-500">
+    <nav className="flex justify-between px-6 py-4 shadow h-16 items-center bg-gray-800">
       <h1 className="text-xl font-bold text-blue-300">Snippy</h1>
       {authData ? (
         <div className="flex items-center gap-2">
           <p className="text-white">Welcome, {authData.username}</p>
-          <button className="bg-gray-800 text-white px-3 py-1 rounded">
+          <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={logout}>
             Logout
           </button>
         </div>
